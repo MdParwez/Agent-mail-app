@@ -1,8 +1,8 @@
 
-# Email Agent (Gemini + Subject Keywords)
+# Autonomus Email Agens:
 
 **What it does (summary):**
-- Polls Gmail inbox for `testaionos@gmail.com`
+- Polls Gmail inbox for `test1234@gmail.com`
 - Extracts keywords from your policy file (`data/airlines_policy.md`) and **matches them against email subjects**.
 - If subject contains any policy keywords → **replies** (Gemini) using RAG on your policy.
 - If no match → **leaves the mail untouched** and **logs SKIP + reason**.
@@ -39,7 +39,3 @@ streamlit run app/ui/logs_app.py --server.port 8501
 - `GET /keywords` — the active keyword list.
 - `GET /logs` — last 500 events.
 
-## Notes
-- Generation: `gemini-2.5-flash` (fast; free tier) for drafting.
-- Embeddings: `gemini-embedding-001` (RAG; 768-dim) for index/query.
-- Continuous poller uses Gmail search: `to:YOUR_ADDRESS is:unread` (configurable via `.env`).
