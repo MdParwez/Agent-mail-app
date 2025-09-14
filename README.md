@@ -1,41 +1,88 @@
+---
 
-# Autonomus Email Agens:
+# 📧 Autonomous Email Agent
 
-**What it does (summary):**
-- Polls Gmail inbox for `test1234@gmail.com`
-- Extracts keywords from your policy file (`data/airlines_policy.md`) and **matches them against email subjects**.
-- If subject contains any policy keywords → **replies** (Gemini) using RAG on your policy.
-- If no match → **leaves the mail untouched** and **logs SKIP + reason**.
-- Beautiful **Streamlit Logs UI** in `app/ui/logs_app.py`.
+An **AI-powered email automation agent** that monitors your Gmail inbox, checks messages against your airline policy file, and automatically replies when needed — with a beautiful logging dashboard.
 
-## 0) One-time setup
+---
 
-1. Put your `credentials.json` (Gmail OAuth) next to `app/email/gmail_client.py`.
-2. Copy `.env.example` → `.env` and set your `GEMINI_API_KEY` (free) and ensure `GMAIL_ADDRESS` is correct.
-3. Ensure your policy lives at `data/airlines_policy.md` (already copied).
+## ✨ What It Does
 
-## 1) Install & bootstrap
+🔹 Polls Gmail inbox for `test1234@gmail.com`
+🔹 Extracts **keywords** from your policy file (`data/airlines_policy.md`)
+🔹 Matches keywords against **incoming email subjects**
+🔹 If match found → replies using **Gemini + RAG on policy**
+🔹 If no match → skips email and logs reason
+🔹 Real-time **Streamlit Logs UI** for monitoring
+
+---
+
+## ⚡ Quick Start
+
+### 0️⃣ One-time Setup
+
+1. Place your Gmail OAuth file `credentials.json` in:
+
+   ```
+   app/email/gmail_client.py
+   ```
+2. Copy `.env.example` → `.env` and configure:
+
+   ```env
+   GEMINI_API_KEY=your_gemini_key_here
+   GMAIL_ADDRESS=test1234@gmail.com
+   POLL_INTERVAL=60
+   ```
+3. Ensure your airline policy file exists:
+
+   ```
+   data/airlines_policy.md
+   ```
+
+---
+
+### 1️⃣ Install & Bootstrap
+
 ```bash
 bash scripts/bootstrap.sh
 ```
 
-This installs deps and **builds keywords** into `data/keywords.json`.
+📌 Installs all dependencies and generates `data/keywords.json`
 
-## 2) Run the agent (server + background poller)
+---
+
+### 2️⃣ Run the Agent (Server + Background Poller)
+
 ```bash
 uvicorn app.main:app --reload --port 8000
 ```
-- On startup the agent creates a **background task** that polls Gmail every `POLL_INTERVAL` seconds (default 60).
-- It only replies if **subject keyword match** succeeds.
 
-## 3) Start the Logs UI
+✅ On startup, a background task starts polling Gmail every `POLL_INTERVAL` seconds (default: 60).
+✅ Replies only if subject **matches a keyword**.
+
+---
+
+### 3️⃣ Start the Logs UI
+
 ```bash
 streamlit run app/ui/logs_app.py --server.port 8501
 ```
-- Live metrics, search, auto-refresh.
 
-## Endpoints
-- `GET /health` — status.
-- `GET /keywords` — the active keyword list.
-- `GET /logs` — last 500 events.
+📊 Features:
+
+* Live metrics
+* Search & filtering
+* Auto-refresh logs
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint    | Description                  |
+| ------ | ----------- | ---------------------------- |
+| GET    | `/health`   | Agent status check           |
+| GET    | `/keywords` | List active policy keywords  |
+| GET    | `/logs`     | Retrieve last 500 log events |
+
+---
 
